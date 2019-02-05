@@ -198,9 +198,12 @@
             I.y >= 0 && I.y <= CANVAS_HEIGHT;
         };
 
+        I.sprite = Sprite("enemy");
+
         I.draw = function() {
-          ctx.fillStyle =this.color;
-          ctx.fillRect(this.x, this.y, this.width, this.height);
+          //ctx.fillStyle =this.color;
+          //ctx.fillRect(this.x, this.y, this.width, this.height);
+          this.sprite.draw(ctx, this.x, this.y);
         };
 
         I.update = function() {
@@ -216,7 +219,12 @@
         return I;
       };
 
-      
+      player.sprite = Sprite("player");
+
+      player.draw = function() {
+        this.sprite.draw(ctx, this.x, this.y);
+      };
+
 
   </script>
 
