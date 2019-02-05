@@ -28,7 +28,7 @@
     //End making canvas
 
     //start an interval
-      var FPS=30;
+      var FPS=20;
 
       setInterval(function(){
         update();
@@ -155,6 +155,7 @@
 
       player.shoot = function() {
 
+        Sound.play("shoot");
         var bulletPosition = this.midpoint();
 
         playerBullets.push(Bullet({
@@ -216,6 +217,12 @@
 
           I.active = I.active && I.inBounds();
         };
+
+        I.explode = function() {
+          Sound.play("explode");
+          this.active = false;
+        };
+
         return I;
       };
 
@@ -224,6 +231,37 @@
       player.draw = function() {
         this.sprite.draw(ctx, this.x, this.y);
       };
+
+      player.explode = function() {
+        this.active = false;
+      };
+
+      //<-----------collision -------->
+      function collides(a, b) {
+        return a.x < b.x + b.width &&
+              a.x + a.width > b.x &&
+              a.y < b.y + b.height &&
+              a.y + a.height > b.y;
+      }
+
+      function handleCollision() {
+        playerBullets.forEach(function(bullet) {
+          enemies.forEach(function(enemy) {
+            if(collides(bullet, enemy)) {
+              enemy.explode();
+              bullet.active = false;
+            }
+          });
+        });
+
+        enemies.forEach(function(enemy) {
+          if(collides(enemy, player)) {
+            enemy.explode();
+            player.explode();
+          }
+        });
+      };
+
 
 
   </script>
